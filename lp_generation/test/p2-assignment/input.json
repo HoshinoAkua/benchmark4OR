@@ -1,0 +1,26 @@
+{
+    "parameters": [
+        {
+            "definition": "The set of all cores in the CPU",
+            "symbol": "I",
+            "value": "",
+            "shape": []
+        },
+        {
+            "definition": "The set of all tasks to be processed",
+            "symbol": "J",
+            "value": "",
+            "shape": []
+        },
+        {
+            "definition": "Time taken to complete each task per core",
+            "symbol": "c-{i j}",
+            "value": "",
+            "shape": [
+                "I",
+                "J"
+            ]
+        }
+    ],
+    "description": "In the modern multi-core computing environments, distributing tasks over available CPU cores can be quite complex, especially with the consideration of system efficiency. This becomes more complex when there are a large number of diverse tasks, each requiring varying computation times across a multitude of cores. For this modeling competition, your primary task is to design a model around this problem.\n\nTo explain the problem situation, think of every task as having a unique identifier, such as 'j', and each core also has its own unique identifier, 'i'. You'll need to create an indicator setup. This setup will have binary values; the presence or absence of a task 'j' assigned to a core 'i' will be represented. If the indicator shows one value, it means task 'j' is assigned to core 'i', and if it shows the other value, it means task 'j' is not assigned to core 'i'. \n\nYour goal in this competition is to reduce the total computation time to the barest minimum. To achieve this, you want to sum up all the computation times for each task on all of the CPU cores. This summing up aspect represents the work needed to minimize the total computing time. \n\nThe model you create should follow this structure and setup without using mathematical formulas, symbols, or professional jargon. Be sure to be as straightforward and effective in your description as possible. Good luck with the competition!\n\nWe will only consider the following parameter.\n{\n    \"coreSet\": \"The set of all cores in the CPU\",\n    \"taskSet\": \"The set of all tasks to be processed\",\n    \"completionTime\": \"Time taken to complete each task per core\"\n}\nThese parameters will be provided in a separated \"data.json\" as the above dictionary. \n"
+}

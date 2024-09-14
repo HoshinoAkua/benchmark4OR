@@ -1,0 +1,42 @@
+{
+    "parameters": [
+        {
+            "definition": "Number of warehouses in supermarket chain",
+            "symbol": "WarehouseCount",
+            "value": "",
+            "shape": []
+        },
+        {
+            "definition": "Number of supermarket outlets in chain",
+            "symbol": "OutletCount",
+            "value": "",
+            "shape": []
+        },
+        {
+            "definition": "Quantity of apple cartons in each warehouse",
+            "symbol": "AvailableAppleCartons",
+            "value": "",
+            "shape": [
+                "WarehouseCount",
+                "OutletCount"
+            ]
+        },
+        {
+            "definition": "Quantity of apple cartons required at each outlet",
+            "symbol": "RequiredAppleCartons",
+            "value": "",
+            "shape": [
+                "WarehouseCount"
+            ]
+        },
+        {
+            "definition": "Cost of transporting apple cartons from warehouses to outlets",
+            "symbol": "TransportationCost",
+            "value": "",
+            "shape": [
+                "OutletCount"
+            ]
+        }
+    ],
+    "description":"A transportation problem has arisen in relation to the efficient distribution of apple cartons from numerous warehouses to several supermarket chains. Supermarket chains need to ensure the distribution of apple cartons from the warehouses to their various outlets in such a manner that meets the required demand of each outlet.\nEach of these warehouses has a specific maximum capacity at which they can supply these apple cartons. This capacity must not be exceeded at any time. The costs of transporting these apple cartons from the warehouses to the outlets are variable and need to be taken into account. \n\nThe ultimate aim is to find the most cost-effective way of distributing the apple cartons from the warehouses to the outlets. This distribution must satisfy the outlets' needs without surpassing the available capacity of the warehouses. \n The apple cartons need to be transported from each warehouse to each supermarket outlet in certain quantities. These quantities will be determined by multiple constraints. The first one is that a warehouse should not distribute more apple cartons than its supply capacity. The second constraint is that each outlet must have its demand met in full by receiving the precise quantity of apple cartons. \n A third constraint is that the quantity of apple cartons being dispatched from a warehouse to the outlet should never be a negative figure. In summary, the challenge is to transport apple cartons in such a way that total cost is minimized, specific demands of the supermarkets are met, and the ability of each warehouse to supply is respected.\n Specifically we will only consider the following parameter.\n{\"warehouse_count\": \"Number of warehouses in supermarket chain\",\"outlet_count\": \"Number of supermarket outlets in chain\",\"available_apple_cartons\": \"Quantity of apple cartons in each warehouse\",\"required_apple_cartons\": \"Quantity of apple cartons required at each outlet\",\"transportation_cost\": \"Cost of transporting apple cartons from warehouses to outlets\"}\nThese parameter will be provided in a separated \"data.json\" as the above dictionary. " 
+}

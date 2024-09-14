@@ -1,0 +1,13 @@
+{
+    "hyperparametername":["machinenumber", "tasknumber", "resourcenum"],
+    "hyperparametertype":["int","int","int"],
+    "hyperparameterrange":[[100,200],[100,200],[5,10]],
+
+    "parametername":["machineavailabletask", "resourceconsuming","totalresource","conficttask","origintask"],
+    "parametertype":["discrete","int","int","discrete","int"],
+    "parameterrange":[["start","end"],[0,5],[1,10],["start","end"],["start","end"]],
+    "parameterdependency":[["machinenumber","tasknumber"],["tasknumber","resourcenum"],["machinenumber","resourcenum"],["resourcenum","tasknumber"],["tasknumber","machinenumber"]],
+    "dependencytype":[["circulate","bound"],["circulate","circulate"],["circulate","circulate"],["circulate","bound"],["circulate","bound"]]
+
+
+}
