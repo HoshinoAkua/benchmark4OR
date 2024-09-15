@@ -85,13 +85,13 @@ class WLtest():
         for idx in var_idx:
             connect_cons_idx = torch.nonzero(self.g1[:,idx]).squeeze() #对应的不同类的constraint
             v = torch.sum(self.g1[connect_cons_idx],dim = 0)
-            if len(torch.nonzero(v)) != M1:
+            if len(torch.nonzero(v).squeeze()) != M1:
                 is_g1_blocked = False
                 raise Warning('存在图1是不可分割的')
         var_idx = list(samecolor_cluster2.values())[0]
         for idx in var_idx:
             connect_cons_idx = torch.nonzero(self.g2[:,idx]).squeeze()
-            if len(torch.nonzero(v)) != M2:
+            if len(torch.nonzero(v).squeeze()) != M2:
                 is_g2_blocked = False
                 raise Warning('存在图2是不可分割的')
         return is_g1_blocked == is_g2_blocked
