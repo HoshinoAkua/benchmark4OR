@@ -17,17 +17,16 @@ def graph_generator(ins_name):
     m.hideOutput(True)
     m.readProblem(ins_name)
     
-    ncons = m.getNConss()
+    
     nvars = m.getNVars()
     
     mvars = m.getVars()
-    mcons = m.getConss()
+    
     
     mvars.sort(key=lambda v: v.name)
     
-    var_feature = torch.zeros((nvars,4))
-    cons_feature = torch.zeros((ncons,4))
-    A = torch.zeros((ncons, nvars))
+    var_feature = torch.zeros((nvars,2))
+   
     
     #得到变量节点的特征
     obj = m.getObjective()
@@ -40,8 +39,16 @@ def graph_generator(ins_name):
             bin = 1
         else:
             bin = 0
-        feature = [obj_coeff, lb,ub,bin]
+        m.addCons(var>=lb)
+        m.addCons(var <= ub)
+        feature = [obj_coeff,bin]
         var_feature[n] = torch.tensor(feature)
+
+
+    ncons = m.getNConss()
+    mcons = m.getConss()
+    cons_feature = torch.zeros((ncons,2))
+    A = torch.zeros((ncons, nvars))
     #得到约束节点的特征
     for i in range(ncons):
         cons = mcons[i]
@@ -55,7 +62,7 @@ def graph_generator(ins_name):
         elif rhs == 1e20:
             sense = 1.0
             b = lhs
-        feature = [b,sense,-1e20,1e20]
+        feature = [b,sense]
         cons_feature[i] = torch.tensor(feature)
 
     #得到邻接矩阵

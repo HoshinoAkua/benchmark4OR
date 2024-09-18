@@ -20,11 +20,12 @@ class WLtest():
             self.w2 = torch.tensor(w2)
             self.v2 = torch.tensor(v2)
             
-        self.feature1 = torch.vstack((self.w1, self.v1))
-        self.feature2 = torch.vstack((self.w2, self.v2))
+        
         
         
     def coloring(self):
+        self.feature1 = torch.vstack((self.w1, self.v1))
+        self.feature2 = torch.vstack((self.w2, self.v2))
         if isinstance(self.feature1, np.ndarray):
             self.feature = np.vstack((self.feature1, self.feature2))
         elif isinstance(self.feature1, torch.Tensor):
@@ -109,7 +110,9 @@ class WLtest():
         M1 = len(self.color1[0])
         M2 = len(self.color2[0])
         assert M1 == M2, "没有统一编码"
-        if N1 != N2 or N11!=N21:
+        if N1 != N2 or N11!=N21: #约束/变量个数不同
+            return False
+        elif M1 > N1: #两个图中变量/约束有不同的情况
             return False
         elif M1 == N1:
             return True

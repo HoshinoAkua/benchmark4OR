@@ -5,8 +5,8 @@ from wl_test_final import WLtest
 torch.set_printoptions(profile="full")
 
 
-info1 = graph_generator('wl_test/lp_generation/test/model.lp')
-info2 = graph_generator('wl_test/lp_generation/test/answer_eoe.lp')
+info1 = graph_generator('/home/hanyizhou/wl_test/lp_generation/test/model.lp')
+info2 = graph_generator('/home/hanyizhou/wl_test/lp_generation/test/answer_eoe_gpt-4o-2024-08-06.lp')
 #print(info[1],info[2],info[3],info[4])
 A1 = info1[0]
 A2 = info2[0]
