@@ -34,7 +34,12 @@ def graph_generator(ins_name):
         var = mvars[n]
         obj_coeff = obj[var]
         lb = var.getLbOriginal()
+        if lb != 0:
+            m.addCons(var >=0)
+        
         ub = var.getUbOriginal()
+        if ub != 1e20:
+            m.addCons(var <= 1e20)
         if var.vtype() == 'BINARY':
             bin = 1
         else:
