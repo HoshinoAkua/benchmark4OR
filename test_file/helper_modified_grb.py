@@ -22,12 +22,14 @@ def graph_generator(ins_name):
         obj_coeff = var.Obj
         lb = var.LB
         ub = var.UB
-        if ub != 1e20:
-            m.addConstr(var <= 1e20)
+        if ub != float('inf'):
+            m.addConstr(var <= float('inf'))
         if lb != 0:
             m.addConstr(var >= 0)
+        
         m.addConstr(var >= lb)
         m.addConstr(var <= ub)
+        m.update()
         bin = 1 if var.VType == GRB.BINARY else 0
         feature = [obj_coeff, bin]
         var_feature[n] = torch.tensor(feature)
