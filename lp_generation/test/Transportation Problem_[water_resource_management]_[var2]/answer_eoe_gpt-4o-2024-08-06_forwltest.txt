@@ -1,0 +1,53 @@
+from gurobipy import Model, GRB
+import json
+
+# Load data from JSON file
+with open('data.json', 'r') as f:
+    data = json.load(f)
+
+reservoirs = data['reservoirs']
+fields = data['fields']
+costs = data['costs']
+evaporation_rates = data['evaporation_rates']
+
+num_reservoirs = len(reservoirs)
+num_fields = len(fields)
+
+# Create a new model
+model = Model("water_resource_management")
+
+# Decision variables: amount of water transported from each reservoir to each field
+transport = model.addVars(num_reservoirs, num_fields, name="transport", lb=0)
+
+# Objective: Minimize total transportation cost
+model.setObjective(
+    sum(costs[i][j] * transport[i, j] for i in range(num_reservoirs) for j in range(num_fields)),
+    GRB.MINIMIZE
+)
+
+# Constraints: Water availability at each reservoir
+for i in range(num_reservoirs):
+    model.addConstr(
+        sum(transport[i, j] for j in range(num_fields)) <= reservoirs[i],
+        name=f"ReservoirCapacity_{i}"
+    )
+
+# Constraints: Water requirements at each field considering evaporation losses
+for j in range(num_fields):
+    model.addConstr(
+        sum(transport[i, j] * (1 - evaporation_rates[i][j]) for i in range(num_reservoirs)) >= fields[j],
+        name=f"FieldRequirement_{j}"
+    )
+
+# Optimize the model
+model.optimize()
+
+# Output the results
+if model.status == GRB.OPTIMAL:
+    print("Optimal transportation plan:")
+    for i in range(num_reservoirs):
+        for j in range(num_fields):
+            if transport[i, j].x > 0:
+                print(f"Transport {transport[i, j].x} units from Reservoir {i} to Field {j}")
+else:
+    print("No optimal solution found.")

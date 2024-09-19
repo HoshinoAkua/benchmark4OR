@@ -1,0 +1,32 @@
+import json
+import random
+
+# Function to generate random float numbers within a large range
+def generate_random_float(low, high):
+    return random.uniform(low, high)
+
+# Number of power plants and regions
+num_plants = random.randint(5, 10)  # Random number of power plants between 5 and 10
+num_regions = random.randint(5, 10)  # Random number of regions between 5 and 10
+
+# Generate random supply capacities for each power plant
+supply = [generate_random_float(1000, 10000) for _ in range(num_plants)]
+
+# Generate random demands for each region
+demand = [generate_random_float(1000, 10000) for _ in range(num_regions)]
+
+# Generate random transmission costs from each power plant to each region
+cost = [[generate_random_float(1, 100) for _ in range(num_regions)] for _ in range(num_plants)]
+
+# Create the data dictionary
+data = {
+    'supply': supply,
+    'demand': demand,
+    'cost': cost
+}
+
+# Save the data to a JSON file
+with open('data.json', 'w') as f:
+    json.dump(data, f, indent=4)
+
+print("Data has been generated and saved to 'data.json'")

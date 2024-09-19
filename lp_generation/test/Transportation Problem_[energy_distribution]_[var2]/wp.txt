@@ -1,0 +1,36 @@
+**Problem Statement: Transportation Problem in energy_distribution**
+
+**Background:**
+In the context of energy distribution, the integration of renewable energy sources with traditional power plants is crucial for meeting regional energy demands efficiently. This problem involves determining the optimal transportation of electricity from various power plants and renewable sources to different regions, while minimizing the total cost, which includes both transmission costs and penalties for unmet demand.
+
+**Problem Description:**
+The goal is to minimize the total cost of distributing electricity from multiple power plants and renewable energy sources to various regions. The total cost includes the transmission costs from power plants to regions and penalties for any unmet demand in the regions. The problem must consider the generation capacities of both traditional and renewable sources and ensure that the energy demands of all regions are met as closely as possible.
+
+**parameters:**
+Only consider parameters listed below. And these parameters will be provided in a separated "data.json".
+{
+	'supply': 'The generation capacities of each power plant; list of floats with length equal to the number of power plants.',
+	'demand': 'The energy demands of each region; list of floats with length equal to the number of regions.',
+	'cost': 'The transmission costs from each power plant to each region; 2D list of floats with dimensions (number of power plants, number of regions).',
+	'renewable_supply': 'The generation capacities of renewable sources; list of floats with length equal to the number of renewable sources.',
+	'penalty_cost': 'Penalty cost for unmet demand in each region; list of floats with length equal to the number of regions.',
+}
+
+**Decision Variables:**
+- The amount of electricity transported from each power plant to each region.
+- The amount of electricity transported from each renewable source to each region.
+- The amount of unmet demand in each region.
+
+**Objective:**
+Minimize the total cost, which includes the transmission costs from power plants to regions and the penalties for unmet demand in the regions.
+
+**Constraints:**
+- The total amount of electricity supplied by each power plant cannot exceed its generation capacity.
+- The total amount of electricity supplied by each renewable source cannot exceed its generation capacity.
+- The total amount of electricity received by each region, including unmet demand, must meet or exceed the region's energy demand.
+
+**Implementation Notes:**
+The problem should be formulated as a linear programming model. The decision variables, objective function, and constraints should be defined according to the provided parameters. The model should be solved using an appropriate optimization solver, and the results should be saved in a suitable format.
+
+**Expected Outcome:**
+The expected outcome is the optimal transportation plan that minimizes the total cost of electricity distribution, including the transmission costs and penalties for unmet demand. The solution should specify the amount of electricity transported from each power plant and renewable source to each region, as well as the amount of unmet demand in each region.

@@ -1,0 +1,52 @@
+from gurobipy import Model, GRB
+import json
+
+# Load data from JSON file
+with open('data.json', 'r') as f:
+    data = json.load(f)
+
+supply = data['supply']
+demand = data['demand']
+cost = data['cost']
+
+num_warehouses = len(supply)
+num_stores = len(demand)
+
+# Create a new model
+model = Model("Transportation_Problem")
+
+# Create variables
+x = model.addVars(num_warehouses, num_stores, name="x", lb=0)
+
+# Set objective
+model.setObjective(
+    sum(cost[i][j] * x[i, j] for i in range(num_warehouses) for j in range(num_stores)),
+    GRB.MINIMIZE
+)
+
+# Add supply constraints
+for i in range(num_warehouses):
+    model.addConstr(
+        sum(x[i, j] for j in range(num_stores)) <= supply[i],
+        name=f"supply_{i}"
+    )
+
+# Add demand constraints
+for j in range(num_stores):
+    model.addConstr(
+        sum(x[i, j] for i in range(num_warehouses)) == demand[j],
+        name=f"demand_{j}"
+    )
+
+# Optimize model
+model.optimize()
+
+# Print the solution
+if model.status == GRB.OPTIMAL:
+    solution = model.getAttr('x', x)
+    for i in range(num_warehouses):
+        for j in range(num_stores):
+            print(f"Transport {solution[i, j]} units from warehouse {i} to store {j}")
+    print(f"Total transportation cost: {model.objVal}")
+else:
+    print("No optimal solution found.")

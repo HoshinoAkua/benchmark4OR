@@ -1,0 +1,30 @@
+import json
+import random
+
+# Function to generate random float numbers
+def generate_random_floats(size, lower_bound, upper_bound):
+    return [random.uniform(lower_bound, upper_bound) for _ in range(size)]
+
+# Parameters
+num_warehouses = random.randint(5, 10)  # Random number of warehouses between 5 and 10
+num_stores = random.randint(5, 10)  # Random number of stores between 5 and 10
+
+# Generate random supply for each warehouse
+supply = generate_random_floats(num_warehouses, 1000, 100000)
+
+# Generate random demand for each store
+demand = generate_random_floats(num_stores, 1000, 100000)
+
+# Generate random transportation cost from each warehouse to each store
+cost = [[random.uniform(1, 1000) for _ in range(num_stores)] for _ in range(num_warehouses)]
+
+# Create data dictionary
+data = {
+    'supply': supply,
+    'demand': demand,
+    'cost': cost
+}
+
+# Save data to a json file
+with open('data.json', 'w') as f:
+    json.dump(data, f, indent=4)

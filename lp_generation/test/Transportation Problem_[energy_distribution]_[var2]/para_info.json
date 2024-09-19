@@ -1,0 +1,7 @@
+{
+    "supply": "The generation capacities of each power plant; list of floats with length equal to the number of power plants.",
+    "demand": "The energy demands of each region; list of floats with length equal to the number of regions.",
+    "cost": "The transmission costs from each power plant to each region; 2D list of floats with dimensions (number of power plants, number of regions).",
+    "renewable_supply": "The generation capacities of renewable sources; list of floats with length equal to the number of renewable sources.",
+    "penalty_cost": "Penalty cost for unmet demand in each region; list of floats with length equal to the number of regions."
+}

@@ -1,0 +1,6 @@
+{
+    "reservoirs": "the available amount of water in each reservoir; list of length (number of reservoirs)",
+    "fields": "the required amount of water for each field; list of length (number of fields)",
+    "costs": "the transportation cost per unit of water from each reservoir to each field; 2D list with shape (number of reservoirs, number of fields)",
+    "evaporation_rates": "the evaporation rate per unit distance from each reservoir to each field; 2D list with shape (number of reservoirs, number of fields)"
+}

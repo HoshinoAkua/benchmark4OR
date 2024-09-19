@@ -1,0 +1,6 @@
+{
+    "supply": "the supply available at each warehouse; list of length equal to the number of warehouses",
+    "demand": "the demand required at each retail store; list of length equal to the number of retail stores",
+    "cost": "the transportation cost from each warehouse to each retail store; 2D list with shape (number of warehouses, number of retail stores)",
+    "capacity": "the maximum capacity of each route from warehouse to store; 2D list with shape (number of warehouses, number of retail stores)"
+}

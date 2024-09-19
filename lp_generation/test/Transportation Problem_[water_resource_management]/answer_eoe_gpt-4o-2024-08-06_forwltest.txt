@@ -1,0 +1,47 @@
+import gurobipy as gp
+from gurobipy import GRB
+import json
+
+# Load data from JSON file
+with open('data.json', 'r') as f:
+    data = json.load(f)
+
+reservoirs = data['reservoirs']
+fields = data['fields']
+costs = data['costs']
+
+num_reservoirs = len(reservoirs)
+num_fields = len(fields)
+
+# Create a new model
+model = gp.Model("water_resource_management")
+
+# Create variables
+transport = model.addVars(num_reservoirs, num_fields, name="transport", lb=0)
+
+# Set objective
+model.setObjective(gp.quicksum(costs[i][j] * transport[i, j] for i in range(num_reservoirs) for j in range(num_fields)), GRB.MINIMIZE)
+
+# Add constraints
+# Constraint 1: The total amount of water transported from each reservoir cannot exceed its capacity
+for i in range(num_reservoirs):
+    model.addConstr(gp.quicksum(transport[i, j] for j in range(num_fields)) <= reservoirs[i], name=f"reservoir_capacity_{i}")
+
+# Constraint 2: The total amount of water received by each field must meet its requirement
+for j in range(num_fields):
+    model.addConstr(gp.quicksum(transport[i, j] for i in range(num_reservoirs)) == fields[j], name=f"field_requirement_{j}")
+
+# Optimize model
+model.optimize()
+
+# Print the solution
+if model.status == GRB.OPTIMAL:
+    print("Optimal transportation plan:")
+    for i in range(num_reservoirs):
+        for j in range(num_fields):
+            if transport[i, j].x > 0:
+                print(f"Transport {transport[i, j].x} units of water from reservoir {i} to field {j}")
+    print(f"Total transportation cost: {model.objVal}")
+else:
+    print("No optimal solution found.")
+```

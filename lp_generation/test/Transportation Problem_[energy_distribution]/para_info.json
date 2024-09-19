@@ -1,0 +1,5 @@
+{
+    "supply": "The generation capacities of each power plant; list of length (number of power plants)",
+    "demand": "The energy demands of each region; list of length (number of regions)",
+    "cost": "The transmission costs from each power plant to each region; 2D list with shape (number of power plants, number of regions)"
+}

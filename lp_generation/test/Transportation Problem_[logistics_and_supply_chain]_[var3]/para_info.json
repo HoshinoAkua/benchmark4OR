@@ -1,0 +1,7 @@
+{
+    "supply": "The supply available at each warehouse; list of float numbers with length equal to the number of warehouses.",
+    "demand": "The demand required at each retail store; list of float numbers with length equal to the number of retail stores.",
+    "cost": "The transportation cost from each warehouse to each retail store; 2D list of float numbers with shape (number of warehouses, number of retail stores).",
+    "time": "The transportation time from each warehouse to each retail store; 2D list of float numbers with shape (number of warehouses, number of retail stores).",
+    "max_time": "The maximum allowable transportation time for the goods; single float number."
+}

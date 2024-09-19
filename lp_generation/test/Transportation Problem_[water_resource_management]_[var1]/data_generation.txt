@@ -1,0 +1,22 @@
+import json
+import random
+
+# Function to generate random float numbers within a specified range
+def generate_random_float(min_val, max_val):
+    return random.uniform(min_val, max_val)
+
+# Number of reservoirs and fields
+num_reservoirs = random.randint(5, 10)  # Random number of reservoirs between 5 and 10
+num_fields = random.randint(5, 10)  # Random number of fields between 5 and 10
+
+# Generate random data
+data = {
+    "reservoirs": [generate_random_float(1000, 10000) for _ in range(num_reservoirs)],  # Random water amounts in reservoirs
+    "fields": [generate_random_float(500, 5000) for _ in range(num_fields)],  # Random water requirements for fields
+    "costs": [[generate_random_float(1, 100) for _ in range(num_fields)] for _ in range(num_reservoirs)],  # Random transportation costs
+    "evaporation_rates": [[generate_random_float(0.01, 0.1) for _ in range(num_fields)] for _ in range(num_reservoirs)]  # Random evaporation rates
+}
+
+# Save the data to a JSON file
+with open('data.json', 'w') as f:
+    json.dump(data, f, indent=4)

@@ -1,0 +1,34 @@
+**Problem Statement: Transportation Problem in logistics_and_supply_chain**
+
+**Background:**
+In the logistics and supply chain domain, the transportation problem involves determining the most cost-effective way to transport goods from multiple warehouses to multiple retail stores. This variant of the classical transportation problem includes perishability constraints, where each type of good has a maximum allowable transportation time, and the transportation cost is dependent on the transportation time.
+
+**Problem Description:**
+The goal is to minimize the total transportation cost while ensuring that the supply from each warehouse meets the demand at each retail store and that the transportation time does not exceed the maximum allowable time for perishable goods.
+
+**parameters:**
+Only consider parameters listed below. And these parameters will be provided in a separated "data.json".
+{
+	'supply': 'The supply available at each warehouse; list of float numbers with length equal to the number of warehouses.',
+	'demand': 'The demand required at each retail store; list of float numbers with length equal to the number of retail stores.',
+	'cost': 'The transportation cost from each warehouse to each retail store; 2D list of float numbers with shape (number of warehouses, number of retail stores).',
+	'time': 'The transportation time from each warehouse to each retail store; 2D list of float numbers with shape (number of warehouses, number of retail stores).',
+	'max_time': 'The maximum allowable transportation time for the goods; single float number.',
+}
+
+**Decision Variables:**
+- \( x[i, j] \): The amount of goods transported from warehouse \( i \) to store \( j \).
+
+**Objective:**
+Minimize the total transportation cost, which is the sum of the transportation costs from each warehouse to each retail store.
+
+**Constraints:**
+1. Supply constraints: The total amount transported from each warehouse cannot exceed its supply.
+2. Demand constraints: The total amount transported to each store must meet its demand.
+3. Perishability constraints: The transportation time from each warehouse to each store must not exceed the maximum allowable transportation time for the goods.
+
+**Implementation Notes:**
+The problem should be modeled as a linear programming problem. The decision variables, objective function, and constraints should be defined according to the provided parameters.
+
+**Expected Outcome:**
+The expected outcome is the optimal transportation plan that minimizes the total transportation cost while satisfying all supply, demand, and perishability constraints.

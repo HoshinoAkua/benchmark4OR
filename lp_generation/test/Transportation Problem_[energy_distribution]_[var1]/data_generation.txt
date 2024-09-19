@@ -1,0 +1,22 @@
+import json
+import random
+
+# Function to generate random float numbers
+def generate_random_floats(size, lower_bound=1e3, upper_bound=1e6):
+    return [random.uniform(lower_bound, upper_bound) for _ in range(size)]
+
+# Number of power plants and regions
+num_plants = random.randint(5, 10)  # Randomly choose between 5 to 10 power plants
+num_regions = random.randint(5, 10)  # Randomly choose between 5 to 10 regions
+
+# Generate data
+data = {
+    'supply': generate_random_floats(num_plants),
+    'demand': generate_random_floats(num_regions),
+    'cost': [[random.uniform(1e2, 1e5) for _ in range(num_regions)] for _ in range(num_plants)],
+    'loss': [[random.uniform(1e-2, 1e2) for _ in range(num_regions)] for _ in range(num_plants)]
+}
+
+# Save data to a JSON file
+with open('data.json', 'w') as f:
+    json.dump(data, f, indent=4)

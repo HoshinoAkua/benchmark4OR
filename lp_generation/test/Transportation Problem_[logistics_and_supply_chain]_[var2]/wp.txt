@@ -1,0 +1,33 @@
+**Problem Statement: Transportation Problem in logistics_and_supply_chain**
+
+**Background:**
+In the logistics and supply chain domain, the classical transportation problem involves determining the most cost-effective way to transport goods from multiple warehouses to multiple retail stores. This variant of the classical transportation problem includes capacity constraints on the routes between warehouses and stores. Each route has a maximum capacity that cannot be exceeded.
+
+**Problem Description:**
+The goal is to minimize the total transportation cost while satisfying the supply constraints at each warehouse, the demand constraints at each retail store, and the capacity constraints on each transportation route.
+
+**parameters:**
+Only consider parameters listed below. And these parameters will be provided in a separated "data.json".
+{
+	'supply': 'the supply available at each warehouse; list of length equal to the number of warehouses',
+	'demand': 'the demand required at each retail store; list of length equal to the number of retail stores',
+	'cost': 'the transportation cost from each warehouse to each retail store; 2D list with shape (number of warehouses, number of retail stores)',
+	'capacity': 'the maximum capacity of each route from warehouse to store; 2D list with shape (number of warehouses, number of retail stores)',
+}
+
+**Decision Variables:**
+- The amount transported from warehouse i to store j.
+
+**Objective:**
+Minimize the total transportation cost from all warehouses to all retail stores.
+
+**Constraints:**
+1. The total amount transported from each warehouse cannot exceed its supply.
+2. The total amount transported to each store must meet its demand.
+3. The amount transported on each route cannot exceed its capacity.
+
+**Implementation Notes:**
+The problem should be formulated as a linear programming model and solved using an appropriate optimization solver. The decision variables, objective function, and constraints should be defined as described above.
+
+**Expected Outcome:**
+The optimal transportation plan that minimizes the total transportation cost while satisfying all supply, demand, and capacity constraints.

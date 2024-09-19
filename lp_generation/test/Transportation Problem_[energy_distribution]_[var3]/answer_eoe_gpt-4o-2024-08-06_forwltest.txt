@@ -1,0 +1,52 @@
+from gurobipy import Model, GRB
+import json
+
+# Load data from JSON file
+with open('data.json', 'r') as f:
+    data = json.load(f)
+
+# Extract parameters
+supply = data['supply']
+demand = data['demand']
+cost = data['cost']
+emission_rate = data['emission_rate']
+emission_limit = data['emission_limit']
+
+num_plants = len(supply)
+num_regions = len(demand)
+
+# Create a new model
+model = Model("energy_distribution")
+
+# Decision variables: amount of electricity transported from each power plant to each region
+x = model.addVars(num_plants, num_regions, name="x", lb=0)
+
+# Objective: Minimize total transmission cost
+model.setObjective(sum(cost[i][j] * x[i, j] for i in range(num_plants) for j in range(num_regions)), GRB.MINIMIZE)
+
+# Constraints
+# 1. Supply constraints: Total electricity supplied by each power plant cannot exceed its capacity
+for i in range(num_plants):
+    model.addConstr(sum(x[i, j] for j in range(num_regions)) <= supply[i], name=f"supply_{i}")
+
+# 2. Demand constraints: Total electricity received by each region must meet its demand
+for j in range(num_regions):
+    model.addConstr(sum(x[i, j] for i in range(num_plants)) == demand[j], name=f"demand_{j}")
+
+# 3. Emission constraints: Emissions from each power plant must not exceed the emission limit
+for i in range(num_plants):
+    model.addConstr(sum(emission_rate[i] * x[i, j] for j in range(num_regions)) <= emission_limit[i], name=f"emission_{i}")
+
+# Optimize the model
+model.optimize()
+
+# Print the results
+if model.status == GRB.OPTIMAL:
+    print("Optimal transportation plan:")
+    for i in range(num_plants):
+        for j in range(num_regions):
+            print(f"Power Plant {i} to Region {j}: {x[i, j].x} units")
+    print(f"Total Transmission Cost: {model.objVal}")
+else:
+    print("No optimal solution found.")
+```
