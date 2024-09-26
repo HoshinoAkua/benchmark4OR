@@ -1,4 +1,4 @@
-from helper_modified import  graph_generator
+from helper_modified_grb import  graph_generator
 import torch
 from wl_test_l2O import wl_test
 from wl_test_final import WLtest

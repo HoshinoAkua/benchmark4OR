@@ -60,7 +60,8 @@ class WLtest():
         因此 J = 2.
         '''
         if J - int(J) != 0:
-            raise Warning('出现了未知的对称性情况')
+            print('出现了未知的对称性情况')
+            return False
         color_var1 = self.color1[:N11]
         color_var2 = self.color2[:N21]
         is_g1_blocked = True
@@ -129,6 +130,7 @@ class WLtest():
         self.g1: Union[torch.Tensor, np.ndarray]
         self.g2: Union[torch.Tensor, np.ndarray]
         if self.g1.shape != self.g2.shape:
+            print(1)
             return "not same"
         for i in range(maxiter):
             #对feature进行染色
