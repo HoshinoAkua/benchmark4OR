@@ -1,7 +1,7 @@
 import torch
 import torch.nn.functional
 import numpy as np
-
+from typing import Union
 class WLtest():
     def __init__(self, g1, w1, v1, g2, w2, v2):#w是约束节点, v是变量节点
         self.g1 = g1
@@ -117,6 +117,7 @@ class WLtest():
         elif M1 == N1:
             return True
         else: #出现了对称性
+            print('出现了对称性')
             return self.symmetry_detection(N1, M1, M2, N11, N21)
         #在检测的过程中会只会出现以下几种情况
         #1. 两张图的节点个数不同, 直接不同构
@@ -125,6 +126,10 @@ class WLtest():
         #4. 所有节点个数相同, 但是a图中存在b图中没有的节点, 且没有重复节点, 表现在one-hot上就是编码长度多于节点个数.
         #5. 注意: 不会出现重复节点, 因此第一个图是N11加N12个节点特征, 第二张图要是和第一张图同构也应该是这些特征, 所以可以通过特征的个数判断是否同构. 
     def test(self, maxiter=2):
+        self.g1: Union[torch.Tensor, np.ndarray]
+        self.g2: Union[torch.Tensor, np.ndarray]
+        if self.g1.shape != self.g2.shape:
+            return "not same"
         for i in range(maxiter):
             #对feature进行染色
             self.coloring() #染色信息存储在self.color
