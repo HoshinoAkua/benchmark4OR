@@ -1,7 +1,6 @@
 from helper_modified_grb import  graph_generator
 import torch
-from wl_test_l2O import wl_test
-from wl_test_final import WLtest
+from wl_test.test_file.extend_wltest import WLtest
 torch.set_printoptions(profile="full")
 
 import os
@@ -38,11 +37,7 @@ for root, dirs, files in os.walk(dir):
 
 
                     wltest = WLtest(A1, c1,f1,A2,c2,f2)
-                    if wl_test!= None:
-
-                        print(wltest.test(),n)
-                    else:
-                        print(1)
+                    print(wltest.test(),n)
 
 
 

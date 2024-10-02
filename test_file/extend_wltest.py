@@ -49,21 +49,18 @@ class WLtest():
         self.color1, self.color2 = coding_f1.to(torch.float), coding_f2.to(torch.float)
     
     def symmetry_detection(self, N1, M1, M2 ,N11, N21):
-        J = N1/M1
-        #这里N1表示共有N1个节点, M1表示共有M1类节点. 那么每类节点就有 J= N1/M1个
+        
         '''
         在bin-packing问题:
         min y1+y2
         s.t. \\sum_i^4 c_i*x_{i,1} + d1y1 \\le 0
             \\sum_i^4 c_i*x_{i,2} + d2y2 \\le 0
-        在这个例子中, 共有10个节点(N1=10), 共有5类节点{x_{i,j} for i=1,2,3,4, y_j} for j={1,2}
+        在这个例子中, 共有12个节点(N1=10+2), 共有6类节点{x_{i,j} for i=1,2,3,4, y_j, cons_j} for j={1,2}
         因此 J = 2.
         '''
-        if J - int(J) != 0:
-            print('出现了未知的对称性情况')
-            return False
-        color_var1 = self.color1[:N11]
-        color_var2 = self.color2[:N21]
+
+        color_var1 = self.color1[:N11] #图1的var的染色
+        color_var2 = self.color2[:N21] #图二的var染色
         is_g1_blocked = True
         is_g2_blocked = True
         samecolor_cluster1 = {}
@@ -82,24 +79,67 @@ class WLtest():
         如果图G1\\in (m,n)可以被分为几个子图 iff 它的邻接矩阵是可以分块的 iff 这个分块的子矩阵维度是J*M1,
         那么对大的矩阵G1的某k行求和 -> v \\in (1,n)则torch.nonzero(v) == J
         '''
-        
-        var_idx = list(samecolor_cluster1.values())[0] #这个values是一个list, 表示所有具有相同特征的节点们的index
-        for idx in var_idx:
-            connect_cons_idx = torch.nonzero(self.g1[:,idx]).squeeze() #对应的不同类的constraint
-            v = torch.sum(self.g1[connect_cons_idx],dim = 0)
-            if len(torch.nonzero(v).squeeze()) != M1:
-                is_g1_blocked = False
-                raise Warning('存在图1是不可分割的')
-        var_idx = list(samecolor_cluster2.values())[0]
-        for idx in var_idx:
-            connect_cons_idx = torch.nonzero(self.g2[:,idx]).squeeze()
-            if len(torch.nonzero(v).squeeze()) != M2:
-                is_g2_blocked = False
-                raise Warning('存在图2是不可分割的')
-        return is_g1_blocked == is_g2_blocked
+        J = N1/M1
+        #这里N1表示共有N1个节点, M1表示共有M1类节点. 那么每类节点就有 J= N1/M1个
+        if J - int(J) == 0:
+            var_idx = list(samecolor_cluster1.values())[0] #这个values是一个list, 表示所有具有相同特征的节点们的index
+            for idx in var_idx:
+                connect_cons_idx = torch.nonzero(self.g1[:,idx]).squeeze() # type: ignore #对应的不同类的constraint
+                v = torch.sum(self.g1[connect_cons_idx],dim = 0)
+                if len(torch.nonzero(v).squeeze())+len(connect_cons_idx) != M1:
+                    is_g1_blocked = False
+                    raise Warning('存在图1是不可分割的')
+            var_idx = list(samecolor_cluster2.values())[0]
+            for idx in var_idx:
+                connect_cons_idx = torch.nonzero(self.g2[:,idx]).squeeze() # type: ignore
+                if len(torch.nonzero(v).squeeze()) != M2:
+                    is_g2_blocked = False
+                    raise Warning('存在图2是不可分割的')
+            return is_g1_blocked == is_g2_blocked
+        else:
+            color_cons1 = self.color1[N11:] #图1的cons的染色
+            color_cons2 = self.color2[N21:]
+            samecons_cluster1 = {}
+            samecons_cluster2 = {}
+            for i,color in enumerate(color_cons1):
+                if color not in samecons_cluster1.keys():
+                    samecons_cluster1[color] = [i]
+                else:
+                    samecons_cluster1[color].append(i)
+            for i,color in enumerate(color_cons2):
+                if color not in samecons_cluster2.keys():
+                    samecons_cluster2[color] = [i]
+                else:
+                    samecons_cluster2[color].append(i)
             
+            for key in samecons_cluster1:
+                if len(samecons_cluster1[key]) == 1:
+                    idx = samecons_cluster1[key][0]
+                    M1-=1
+                    g1_new = torch.cat([self.g1[:idx],self.g1[idx+1:]], dim=0)
+            for key in samecons_cluster2:
+                if len(samecons_cluster2[key]) == 1:
+                    idx = samecons_cluster2[key][0]
+                    M2-=1
+                    g2_new = torch.cat([self.g2[:idx],self.g2[idx+1:]],dim=0)
+            
+            var_idx = list(samecolor_cluster1.values())[0] #这个values是一个list, 表示所有具有相同特征的节点们的index
+            for idx in var_idx:
+                connect_cons_idx = torch.nonzero(g1_new[:,idx]).squeeze() # type: ignore #对应的不同类的constraint
+                v = torch.sum(g1_new[connect_cons_idx],dim = 0)
+                if len(torch.nonzero(v).squeeze())+len(connect_cons_idx) != M1:
+                    is_g1_blocked = False
+                    raise Warning('存在图1是不可分割的')
+            var_idx = list(samecolor_cluster2.values())[0]
+            for idx in var_idx:
+                connect_cons_idx = torch.nonzero(g2_new[:,idx]).squeeze() # type: ignore
+                v = torch.sum(g2_new[connect_cons_idx],dim = 0)
+                if len(torch.nonzero(v).squeeze())+len(connect_cons_idx) != M2:
+                    is_g2_blocked = False
+                    raise Warning('存在图2是不可分割的')
+            return is_g1_blocked == is_g2_blocked
 
-
+    
 
     def detection(self):#检测self.coding1和self.coding2是否相同
         N1 = len(self.color1)

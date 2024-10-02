@@ -1,7 +1,6 @@
 from helper_modified_grb import  graph_generator
 import torch
-from wl_test_l2O import wl_test
-from wl_test_final import WLtest
+from wl_test.test_file.extend_wltest import WLtest
 torch.set_printoptions(profile="full")
 
 import os
